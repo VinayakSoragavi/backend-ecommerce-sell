@@ -25,7 +25,7 @@ import { TemporaryStorageService } from './temporary-storage.service';
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, OtpService,TemporaryStorageService], // Add OtpService to providers
+  providers: [AuthService, JwtStrategy, OtpService,TemporaryStorageService],
   exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule {}
