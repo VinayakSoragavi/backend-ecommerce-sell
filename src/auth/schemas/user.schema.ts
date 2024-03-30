@@ -13,6 +13,18 @@ export class User extends Document {
 
   @Prop({required:"Please enter the password"})
   password: string;
+
+  @Prop()
+  status:string;
+
+  @Prop()
+  job_role:string;
+
+  @Prop()
+  phone_number:number;
+
+  @Prop()
+  aler_email:string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
