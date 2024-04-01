@@ -6,7 +6,7 @@ export class TemporaryStorageService {
   private cache: NodeCache;
 
   constructor() {
-    this.cache = new NodeCache({ stdTTL: 300 });
+    this.cache = new NodeCache({ stdTTL: 60 });
   }
 
   set(key: string, value: any): void {

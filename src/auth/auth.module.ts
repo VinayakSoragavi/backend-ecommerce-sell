@@ -19,8 +19,7 @@ import { TemporaryStorageService } from './temporary-storage.service';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       global: true,
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: process.env.JWT_EXPIRES },
+      secret: process.env.JWT_SECRET
     }),
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
   ],
