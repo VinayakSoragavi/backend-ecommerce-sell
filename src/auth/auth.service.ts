@@ -51,26 +51,26 @@ export class AuthService {
   }
   }
 
-  async login(loginDto: LoginDto): Promise<{ token: string; user: any }> {
+  async login(loginDto: LoginDto): Promise<{ token?: string; user?: any; message?: string;success:boolean }> {
     const { email, password } = loginDto;
-
+  
     const user = await this.userModel.findOne({ email });
-
+  
     if (!user) {
-      throw new UnauthorizedException('Invalid email or password');
+      return { success:false,message: 'Invalid email or password' };
     }
-
+  
     const isPasswordMatched = await bcrypt.compare(password, user.password);
-
+  
     if (!isPasswordMatched) {
-      throw new UnauthorizedException('Invalid email or password');
+      return {success:false, message: 'Invalid email or password' };
     }
-
+  
     const userWithoutPassword = { ...user.toObject(), password: undefined };
-
+  
     const token = this.jwtService.sign({ id: user._id });
-
-    return { token, user: userWithoutPassword  };
+  
+    return { success:true,token, user: userWithoutPassword };
   }
 
   async forgot_password(otpDto: OtpDto): Promise<{ token: string }> {

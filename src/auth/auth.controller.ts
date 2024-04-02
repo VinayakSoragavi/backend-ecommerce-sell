@@ -31,14 +31,14 @@ export class AuthController {
     }
   }
 
-  @Get('/login')
+  @Post('/login')
   async login(@Body() loginDto: LoginDto, @Res() res: Response): Promise<void> {
     try {
-      const { token, user } = await this.authService.login(loginDto);
+      const { token, user, message,success } = await this.authService.login(loginDto);
       res.cookie('token', token, { /* cookie options */ }).status(HttpStatus.OK).json({
-        success: true,
+        success,
         token,
-        user
+        user, message
       });
     } catch (error) {
       res.status(HttpStatus.UNAUTHORIZED).json({
