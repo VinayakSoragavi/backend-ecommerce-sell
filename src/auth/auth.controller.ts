@@ -10,8 +10,20 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/send-otp')
-  async sendOtp(@Body() body: { email: string }): Promise<void> {
-    await this.authService.sendOtpAndStoreData(body.email);
+  async sendOtp(@Body() body: { email: string }, @Res() res: Response): Promise<void> {
+    
+
+    try {
+      const {message,success } = await this.authService.sendOtpAndStoreData(body.email);;
+      res.json({
+        success, message
+      });
+    } catch (error) {
+      res.status(HttpStatus.UNAUTHORIZED).json({
+        success: false,
+        message: error.message,
+      });
+    }
   }
 
   @Post('/signup')

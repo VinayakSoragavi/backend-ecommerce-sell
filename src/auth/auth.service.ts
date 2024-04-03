@@ -19,11 +19,12 @@ export class AuthService {
         private readonly temporaryStorageService: TemporaryStorageService,
       ) {}
 
-  async sendOtpAndStoreData(email: string): Promise<void> {
+  async sendOtpAndStoreData(email: string): Promise<any> {
     const otp = this.otpService.generateOtp();
     await this.otpService.sendOtpByEmail(email, otp);
     this.temporaryStorageService.delete(email);
     this.temporaryStorageService.set(email, otp);
+    return {success:true, message: 'Otp is send' };
   }
 
   async signUp(signUpDto: SignUpDto): Promise<{ token: string; user: any }> {
