@@ -1,39 +1,38 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import * as otpGenerator from 'otp-generator';
-import * as mailgen from 'mailgen';
-import { Request } from 'express';
+import Mailgen from 'mailgen'; // Correctly import Mailgen
 
 @Injectable()
 export class OtpService {
-
   generateOtp(): string {
     return otpGenerator.generate(6, { upperCase: false, specialChars: false });
   }
 
-  async sendOtpByEmail(email:string, otp:string): Promise<string> {
+  async sendOtpByEmail(email: string, otp: string): Promise<string> {
     try {
-      let config = {
+      const config = {
         service: 'gmail',
         auth: {
-            user: "appaddmaster@gmail.com",
-            pass: "eorvhibhmphmqsyg",
-          },
+          user: 'appaddmaster@gmail.com',
+          pass: 'eorvhibhmphmqsyg',
+        },
       };
 
-      let transporter = nodemailer.createTransport(config);
+      const transporter = nodemailer.createTransport(config);
 
-      let mailGenerator = new mailgen({
+      const mailGenerator = new Mailgen({
+        // Correctly instantiate Mailgen
         theme: 'default',
         product: {
-          name: "Your Product Name", // Update with your product name
+          name: 'Your Product Name', // Update with your product name
           link: 'https://mailgen.js/',
         },
       });
 
-      let response = {
+      const response = {
         body: {
-          name: "User",
+          name: 'User',
           table: {
             data: [
               {
@@ -45,16 +44,16 @@ export class OtpService {
         },
       };
 
-      let mail = mailGenerator.generate(response);
+      const mail = mailGenerator.generate(response);
 
-      let message = {
+      const message = {
         from: 'your_email@gmail.com',
         to: email,
         subject: 'Your OTP for Verification',
         html: mail,
       };
 
-      let info = await transporter.sendMail(message);
+      const info = await transporter.sendMail(message);
       console.log('Email sent: ' + info.response);
       return 'Email sent successfully!';
     } catch (error) {
