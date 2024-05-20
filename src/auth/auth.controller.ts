@@ -46,8 +46,9 @@ export class AuthController {
   @Post('/login')
   async login(@Body() loginDto: LoginDto, @Res() res: Response): Promise<void> {
     try {
+      const expiryDate = new Date(Date.now() + 60 * 1000);
       const { token, user, message,success } = await this.authService.login(loginDto);
-      res.cookie('token', token, { /* cookie options */ }).status(HttpStatus.OK).json({
+      res.cookie('token', token, { expires: expiryDate, httpOnly: true }).status(HttpStatus.OK).json({
         success,
         token,
         user, message

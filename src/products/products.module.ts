@@ -3,10 +3,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
-import { UsersController } from './users.controller';
-import { UsersSchema } from './schema/users.schema';
-import { UsersService } from './users.service';
 import { UserSchema } from 'src/auth/schemas/user.schema';
+import { UsersSchema } from 'src/users/schema/users.schema';
+import { ProductsService } from './products.service';
+import { ProductsController } from './products.controller';
+import { ProductSchema } from './schema/products.schema';
 
 @Module({
   imports: [
@@ -17,12 +18,15 @@ import { UserSchema } from 'src/auth/schemas/user.schema';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       global: true,
-      secret: process.env.JWT_SECRET
+      secret: process.env.JWT_SECRET,
     }),
     MongooseModule.forFeature([{ name: 'Registeruser', schema: UsersSchema }]),
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+    MongooseModule.forFeature([
+      { name: 'Clientproducts', schema: ProductSchema },
+    ]),
   ],
-  controllers: [UsersController],
-  providers: [UsersService],
+  controllers: [ProductsController],
+  providers: [ProductsService],
 })
-export class UsersModule {}
+export class ProductsModule {}
