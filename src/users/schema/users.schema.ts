@@ -5,6 +5,9 @@ import { Document } from 'mongoose';
   timestamps: true,
 })
 export class Registeruser extends Document {
+  @Prop({ unique: [true, 'Duplicate already registered'] })
+  id: string;
+
   @Prop({ required: [true, 'Please enter the name'] })
   name: string;
 

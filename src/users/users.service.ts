@@ -5,6 +5,7 @@ import { CreateUserDto } from './dto/register.dto';
 import { Registeruser } from './schema/users.schema';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/auth/schemas/user.schema';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class UsersService {
@@ -17,12 +18,15 @@ export class UsersService {
 
   async register(
     createUserDto: CreateUserDto,
-    // token: string,
   ): Promise<{ user: Registeruser }> {
     const { name, phone, email, gender, designation, imgUrl } = createUserDto;
 
+    // Generate a unique id if not provided
+    const id = uuidv4();
+
     // Create a new user entry in the Registeruser model
     const newUser = await this.registeruserModel.create({
+      id,
       name,
       phone,
       email,
