@@ -19,10 +19,13 @@ export class UsersService {
   async register(
     createUserDto: CreateUserDto,
   ): Promise<{ user: Registeruser }> {
-    const { name, phone, email, gender, designation, imgUrl } = createUserDto;
+    const { name, phone, email, gender, designation, imgUrl, course } =
+      createUserDto;
+
+    const users = await this.getAllUserdata();
 
     // Generate a unique id if not provided
-    const id = uuidv4();
+    const id = `arya-emp${users.length + 1}`;
 
     // Create a new user entry in the Registeruser model
     const newUser = await this.registeruserModel.create({
@@ -32,6 +35,7 @@ export class UsersService {
       email,
       gender,
       designation,
+      course,
       imgUrl,
     });
 

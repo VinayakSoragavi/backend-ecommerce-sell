@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional, IsArray } from 'class-validator';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -19,6 +19,11 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   readonly designation: string;
+
+  @IsNotEmpty()
+  @IsArray()
+  @IsString({ each: true })
+  readonly course: string[];
 
   @IsOptional()
   @IsString()

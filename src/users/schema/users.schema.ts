@@ -23,6 +23,9 @@ export class Registeruser extends Document {
   @Prop({ required: [true, 'Please enter the designation'] })
   designation: string;
 
+  @Prop({ required: [true, 'Please enter the designation'] })
+  course: string[];
+
   @Prop({ required: false })
   imgUrl?: string; // Optional property for the image URL
 }
