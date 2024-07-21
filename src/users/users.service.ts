@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/register.dto';
@@ -10,79 +10,40 @@ import { User } from 'src/auth/schemas/user.schema';
 export class UsersService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
-    @InjectModel('Registeruser') private usersModel: Model<any>,
+    @InjectModel(Registeruser.name)
+    private registeruserModel: Model<Registeruser>,
     private jwtService: JwtService,
   ) {}
 
   async register(
     createUserDto: CreateUserDto,
-    token: string,
-  ): Promise<{ token: string; user: User }> {
-    const {
+    // token: string,
+  ): Promise<{ user: Registeruser }> {
+    const { name, phone, email, gender, designation, imgUrl } = createUserDto;
+
+    // Create a new user entry in the Registeruser model
+    const newUser = await this.registeruserModel.create({
       name,
-      username,
       phone,
-      alterphone,
-      whatsapp,
-      empid,
-      jobrole,
-      jobmode,
-      address,
-      address_line,
-      city,
-      state,
-      pincode,
-    } = createUserDto;
-
-    const decodedToken: any = this.jwtService.verify(token);
-    const id = decodedToken.id;
-
-    const updatedUser = await this.userModel.findByIdAndUpdate(
-      id,
-      { status: 'register' },
-      { new: true },
-    );
-
-    let email: string;
-    if (updatedUser) {
-      email = updatedUser.email;
-    } else {
-      throw new Error('User not found');
-    }
-
-    const newUser = await this.usersModel.create({
-      id,
-      name,
-      username,
-      phone,
-      alterphone,
       email,
-      whatsapp,
-      empid,
-      jobrole,
-      jobmode,
-      address,
-      address_line,
-      city,
-      state,
-      pincode,
+      gender,
+      designation,
+      imgUrl,
     });
 
-    const newToken = this.jwtService.sign({ id: newUser._id });
-
-    return { token: newToken, user: newUser };
+    return { user: newUser };
   }
 
-  async getUserdata(
-    token: string,
-  ): Promise<{ token: string; user: User | null }> {
+  async getUserdataById(
+    userId: string,
+  ): Promise<{ token: string; user: Registeruser | null }> {
     try {
-      const decodedToken: any = this.jwtService.verify(token);
-      const id = decodedToken.id;
-      const user: any = await this.usersModel.findOne({ id }).exec();
+      const user = await this.registeruserModel.findById(userId).exec();
+
       if (!user) {
-        throw new Error('User not found');
+        throw new NotFoundException('User not found');
       }
+
       const newToken = this.jwtService.sign({ id: user._id });
       return { token: newToken, user };
     } catch (error) {
@@ -90,20 +51,54 @@ export class UsersService {
     }
   }
 
-  async getAllUserdata(token: string): Promise<User[]> {
+  async getAllUserdata(): Promise<Registeruser[]> {
     try {
-      const decodedToken: any = this.jwtService.verify(token);
-      const id = decodedToken.id;
-      const user: any = await this.usersModel.findOne({ id }).exec();
-      console.log(user);
-
-      if (!user) {
-        throw new Error('User not found');
-      }
-      const users: User[] = await this.usersModel.find().exec();
-      return users;
+      return await this.registeruserModel.find().exec();
     } catch (error) {
       throw new Error(`Error fetching user data: ${error.message}`);
+    }
+  }
+
+  async updateUserImage(userId: string, imgUrl: string): Promise<void> {
+    const user = await this.registeruserModel.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
+    }
+
+    user.imgUrl = imgUrl;
+
+    await user.save();
+  }
+
+  async updateUser(
+    userId: string,
+    updateUserDto: CreateUserDto,
+    // token: string,
+  ): Promise<{ token: string; user: Registeruser | null }> {
+    try {
+      const user = await this.registeruserModel.findById(userId);
+
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+
+      Object.assign(user, updateUserDto);
+
+      await user.save();
+
+      const newToken = this.jwtService.sign({ id: user._id });
+      return { token: newToken, user };
+    } catch (error) {
+      throw new Error(`Error updating user data: ${error.message}`);
+    }
+  }
+
+  async deleteUser(userId: string): Promise<void> {
+    const user = await this.registeruserModel.findByIdAndDelete(userId);
+
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
     }
   }
 }

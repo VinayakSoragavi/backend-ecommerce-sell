@@ -1,53 +1,26 @@
-import { IsEmail, IsNotEmpty, IsNumber, IsString, MinLength } from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
 
 export class CreateUserDto {
-  @IsNotEmpty({ message: 'Please enter the name' })
+  @IsNotEmpty()
   @IsString()
   readonly name: string;
 
-  @IsNotEmpty({ message: 'Please enter the username' })
-  @IsString()
-  readonly username: string;
-
-  @IsNotEmpty({ message: 'Please enter the phone' })
-  @IsNumber()
+  @IsNotEmpty()
   readonly phone: number;
 
-  @IsNumber()
-  readonly alterphone?: number;
-
-  @IsNotEmpty({ message: 'Please enter the email' })
-  @IsEmail({}, { message: 'Please enter a valid email' })
+  @IsNotEmpty()
+  @IsString()
   readonly email: string;
 
-  @IsNotEmpty({ message: 'Please enter the whatsapp' })
-  @IsNumber()
-  readonly whatsapp: number;
-
-  @IsNotEmpty({ message: 'Please enter the employer id' })
+  @IsNotEmpty()
   @IsString()
-  readonly empid: string;
+  readonly gender: string;
 
-  @IsNotEmpty({ message: 'Please enter the jobrole' })
+  @IsNotEmpty()
   @IsString()
-  readonly jobrole: string;
+  readonly designation: string;
 
-  @IsNotEmpty({ message: 'Please enter the jobmode' })
+  @IsOptional()
   @IsString()
-  readonly jobmode: string;
-
-  @IsString()
-  readonly address?: string;
-
-  @IsString()
-  readonly address_line?: string;
-
-  @IsString()
-  readonly city?: string;
-
-  @IsString()
-  readonly state?: string;
-
-  @IsNumber()
-  readonly pincode?: number;
+  readonly imgUrl?: string;
 }

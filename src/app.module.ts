@@ -4,7 +4,6 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
 import { GatewayModule } from './gateway/gateway.module';
-import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
@@ -15,7 +14,6 @@ import { ProductsModule } from './products/products.module';
     MongooseModule.forRoot(process.env.DB_URI),
     UsersModule,
     AuthModule,
-    ProductsModule,
     GatewayModule,
   ],
 })
