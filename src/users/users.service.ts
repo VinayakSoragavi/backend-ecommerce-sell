@@ -25,7 +25,7 @@ export class UsersService {
     const users = await this.getAllUserdata();
 
     // Generate a unique id if not provided
-    const id = `arya-emp${users.length + 1}`;
+    const id = `arya-emp-${users.length + 1}`;
 
     // Create a new user entry in the Registeruser model
     const newUser = await this.registeruserModel.create({
