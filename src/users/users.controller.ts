@@ -24,7 +24,7 @@ import { extname } from 'path';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
+  @Post('/register')
   async signUp(
     @Body() createUserDto: CreateUserDto,
     @Res() res: Response,
@@ -91,7 +91,7 @@ export class UsersController {
     }
   }
 
-  @Get()
+  @Get('/list')
   async getAllUserdata(
     @Res() res: Response,
     @Req() req: Request,
