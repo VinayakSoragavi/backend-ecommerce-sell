@@ -54,7 +54,7 @@ export class UsersController {
     }
   }
 
-  @Get('/user/:id')
+  @Get('/:id')
   async getUserInfo(
     @Param('id') id: string,
     @Res() res: Response,
@@ -91,7 +91,7 @@ export class UsersController {
     }
   }
 
-  @Get('/users')
+  @Get('/list')
   async getAllUserdata(
     @Res() res: Response,
     @Req() req: Request,
@@ -120,7 +120,7 @@ export class UsersController {
     }
   }
 
-  @Put('/user/:id')
+  @Put('/:id')
   async updateUser(
     @Param('id') id: string,
     @Body() updateUserDto: CreateUserDto,
@@ -210,7 +210,7 @@ export class UsersController {
     }
   }
 
-  @Delete('/user/:id')
+  @Delete('/:id')
   async deleteUser(
     @Param('id') id: string,
     @Res() res: Response,
